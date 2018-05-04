@@ -2,8 +2,8 @@
 #include <iostream> 
 #include <stdio.h>
 #include <arpa/inet.h>
-
-int create_socket(int port){
+#include <util.h>
+/*int create_socket(int port){
     if((sockfd=socket))
 }
 
@@ -11,5 +11,10 @@ int create_socket(int port){
 int main(){
     int sockfd;
             
+}*/
+
+
+int main(){
+    
 }
 
