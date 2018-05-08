@@ -1,11 +1,14 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <string.h>
-#include <util.h>
+#include <iostream>
+//#include <sys/socket.h>
+//#include <sys/types.h>
+#include <string>
 #include <map>
-
-int error_output(int error_num,string error_info);
-
-void read_config(const char* path);
+#include <fstream>
+//int error_output(int,string);
+#define CONFIG_ERROR -1
+static int port=5000;
+static string webdir="../www"
+int read_config(const char* path);

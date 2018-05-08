@@ -1,20 +1,14 @@
 
 #include <iostream> 
-#include <stdio.h>
-#include <arpa/inet.h>
-#include <util.h>
-/*int create_socket(int port){
-    if((sockfd=socket))
-}
-
+#include <vector>
+#include "util.h"
+using namespace std;
 
 int main(){
-    int sockfd;
-            
-}*/
+    read_config("../config");
+    string s;
 
-
-int main(){
-    
+    cout<<"hello"<<endl;
+    return 0;
 }
 
