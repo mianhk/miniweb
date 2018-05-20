@@ -80,19 +80,97 @@ CMakeFiles/src.dir/main.cpp.obj.provides: CMakeFiles/src.dir/main.cpp.obj.requir
 CMakeFiles/src.dir/main.cpp.obj.provides.build: CMakeFiles/src.dir/main.cpp.obj
 
 
+CMakeFiles/src.dir/epoll.cpp.obj: CMakeFiles/src.dir/flags.make
+CMakeFiles/src.dir/epoll.cpp.obj: ../epoll.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\github\miniweb\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/src.dir/epoll.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\src.dir\epoll.cpp.obj -c F:\github\miniweb\src\epoll.cpp
+
+CMakeFiles/src.dir/epoll.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/epoll.cpp.i"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E F:\github\miniweb\src\epoll.cpp > CMakeFiles\src.dir\epoll.cpp.i
+
+CMakeFiles/src.dir/epoll.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/epoll.cpp.s"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S F:\github\miniweb\src\epoll.cpp -o CMakeFiles\src.dir\epoll.cpp.s
+
+CMakeFiles/src.dir/epoll.cpp.obj.requires:
+
+.PHONY : CMakeFiles/src.dir/epoll.cpp.obj.requires
+
+CMakeFiles/src.dir/epoll.cpp.obj.provides: CMakeFiles/src.dir/epoll.cpp.obj.requires
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/epoll.cpp.obj.provides.build
+.PHONY : CMakeFiles/src.dir/epoll.cpp.obj.provides
+
+CMakeFiles/src.dir/epoll.cpp.obj.provides.build: CMakeFiles/src.dir/epoll.cpp.obj
+
+
+CMakeFiles/src.dir/http_request.cpp.obj: CMakeFiles/src.dir/flags.make
+CMakeFiles/src.dir/http_request.cpp.obj: ../http_request.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\github\miniweb\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/src.dir/http_request.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\src.dir\http_request.cpp.obj -c F:\github\miniweb\src\http_request.cpp
+
+CMakeFiles/src.dir/http_request.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/http_request.cpp.i"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E F:\github\miniweb\src\http_request.cpp > CMakeFiles\src.dir\http_request.cpp.i
+
+CMakeFiles/src.dir/http_request.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/http_request.cpp.s"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S F:\github\miniweb\src\http_request.cpp -o CMakeFiles\src.dir\http_request.cpp.s
+
+CMakeFiles/src.dir/http_request.cpp.obj.requires:
+
+.PHONY : CMakeFiles/src.dir/http_request.cpp.obj.requires
+
+CMakeFiles/src.dir/http_request.cpp.obj.provides: CMakeFiles/src.dir/http_request.cpp.obj.requires
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/http_request.cpp.obj.provides.build
+.PHONY : CMakeFiles/src.dir/http_request.cpp.obj.provides
+
+CMakeFiles/src.dir/http_request.cpp.obj.provides.build: CMakeFiles/src.dir/http_request.cpp.obj
+
+
+CMakeFiles/src.dir/threadpoll.cpp.obj: CMakeFiles/src.dir/flags.make
+CMakeFiles/src.dir/threadpoll.cpp.obj: ../threadpoll.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=F:\github\miniweb\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/src.dir/threadpoll.cpp.obj"
+	C:\MinGW\bin\g++.exe  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\src.dir\threadpoll.cpp.obj -c F:\github\miniweb\src\threadpoll.cpp
+
+CMakeFiles/src.dir/threadpoll.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/src.dir/threadpoll.cpp.i"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E F:\github\miniweb\src\threadpoll.cpp > CMakeFiles\src.dir\threadpoll.cpp.i
+
+CMakeFiles/src.dir/threadpoll.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/src.dir/threadpoll.cpp.s"
+	C:\MinGW\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S F:\github\miniweb\src\threadpoll.cpp -o CMakeFiles\src.dir\threadpoll.cpp.s
+
+CMakeFiles/src.dir/threadpoll.cpp.obj.requires:
+
+.PHONY : CMakeFiles/src.dir/threadpoll.cpp.obj.requires
+
+CMakeFiles/src.dir/threadpoll.cpp.obj.provides: CMakeFiles/src.dir/threadpoll.cpp.obj.requires
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/threadpoll.cpp.obj.provides.build
+.PHONY : CMakeFiles/src.dir/threadpoll.cpp.obj.provides
+
+CMakeFiles/src.dir/threadpoll.cpp.obj.provides.build: CMakeFiles/src.dir/threadpoll.cpp.obj
+
+
 # Object files for target src
 src_OBJECTS = \
-"CMakeFiles/src.dir/main.cpp.obj"
+"CMakeFiles/src.dir/main.cpp.obj" \
+"CMakeFiles/src.dir/epoll.cpp.obj" \
+"CMakeFiles/src.dir/http_request.cpp.obj" \
+"CMakeFiles/src.dir/threadpoll.cpp.obj"
 
 # External object files for target src
 src_EXTERNAL_OBJECTS =
 
 src.exe: CMakeFiles/src.dir/main.cpp.obj
+src.exe: CMakeFiles/src.dir/epoll.cpp.obj
+src.exe: CMakeFiles/src.dir/http_request.cpp.obj
+src.exe: CMakeFiles/src.dir/threadpoll.cpp.obj
 src.exe: CMakeFiles/src.dir/build.make
 src.exe: CMakeFiles/src.dir/linklibs.rsp
 src.exe: CMakeFiles/src.dir/objects1.rsp
 src.exe: CMakeFiles/src.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=F:\github\miniweb\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable src.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=F:\github\miniweb\src\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable src.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\src.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -101,6 +179,9 @@ CMakeFiles/src.dir/build: src.exe
 .PHONY : CMakeFiles/src.dir/build
 
 CMakeFiles/src.dir/requires: CMakeFiles/src.dir/main.cpp.obj.requires
+CMakeFiles/src.dir/requires: CMakeFiles/src.dir/epoll.cpp.obj.requires
+CMakeFiles/src.dir/requires: CMakeFiles/src.dir/http_request.cpp.obj.requires
+CMakeFiles/src.dir/requires: CMakeFiles/src.dir/threadpoll.cpp.obj.requires
 
 .PHONY : CMakeFiles/src.dir/requires
 

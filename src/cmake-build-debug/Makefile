@@ -122,6 +122,60 @@ src/fast:
 	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/build
 .PHONY : src/fast
 
+epoll.obj: epoll.cpp.obj
+
+.PHONY : epoll.obj
+
+# target to build an object file
+epoll.cpp.obj:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/epoll.cpp.obj
+.PHONY : epoll.cpp.obj
+
+epoll.i: epoll.cpp.i
+
+.PHONY : epoll.i
+
+# target to preprocess a source file
+epoll.cpp.i:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/epoll.cpp.i
+.PHONY : epoll.cpp.i
+
+epoll.s: epoll.cpp.s
+
+.PHONY : epoll.s
+
+# target to generate assembly for a file
+epoll.cpp.s:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/epoll.cpp.s
+.PHONY : epoll.cpp.s
+
+http_request.obj: http_request.cpp.obj
+
+.PHONY : http_request.obj
+
+# target to build an object file
+http_request.cpp.obj:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/http_request.cpp.obj
+.PHONY : http_request.cpp.obj
+
+http_request.i: http_request.cpp.i
+
+.PHONY : http_request.i
+
+# target to preprocess a source file
+http_request.cpp.i:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/http_request.cpp.i
+.PHONY : http_request.cpp.i
+
+http_request.s: http_request.cpp.s
+
+.PHONY : http_request.s
+
+# target to generate assembly for a file
+http_request.cpp.s:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/http_request.cpp.s
+.PHONY : http_request.cpp.s
+
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -149,6 +203,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+threadpoll.obj: threadpoll.cpp.obj
+
+.PHONY : threadpoll.obj
+
+# target to build an object file
+threadpoll.cpp.obj:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/threadpoll.cpp.obj
+.PHONY : threadpoll.cpp.obj
+
+threadpoll.i: threadpoll.cpp.i
+
+.PHONY : threadpoll.i
+
+# target to preprocess a source file
+threadpoll.cpp.i:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/threadpoll.cpp.i
+.PHONY : threadpoll.cpp.i
+
+threadpoll.s: threadpoll.cpp.s
+
+.PHONY : threadpoll.s
+
+# target to generate assembly for a file
+threadpoll.cpp.s:
+	$(MAKE) -f CMakeFiles\src.dir\build.make CMakeFiles/src.dir/threadpoll.cpp.s
+.PHONY : threadpoll.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -158,9 +239,18 @@ help:
 	@echo ... src
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... epoll.obj
+	@echo ... epoll.i
+	@echo ... epoll.s
+	@echo ... http_request.obj
+	@echo ... http_request.i
+	@echo ... http_request.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... threadpoll.obj
+	@echo ... threadpoll.i
+	@echo ... threadpoll.s
 .PHONY : help
 
 

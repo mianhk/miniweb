@@ -82,7 +82,28 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="F:/github/miniweb/src/epoll.cpp">
+			<Option target="src"/>
+		</Unit>
+		<Unit filename="F:/github/miniweb/src/epoll.h">
+			<Option target="src"/>
+		</Unit>
+		<Unit filename="F:/github/miniweb/src/http_request.cpp">
+			<Option target="src"/>
+		</Unit>
+		<Unit filename="F:/github/miniweb/src/http_request.h">
+			<Option target="src"/>
+		</Unit>
+		<Unit filename="F:/github/miniweb/src/list.h">
+			<Option target="src"/>
+		</Unit>
 		<Unit filename="F:/github/miniweb/src/main.cpp">
+			<Option target="src"/>
+		</Unit>
+		<Unit filename="F:/github/miniweb/src/threadpoll.cpp">
+			<Option target="src"/>
+		</Unit>
+		<Unit filename="F:/github/miniweb/src/threadpoll.h">
 			<Option target="src"/>
 		</Unit>
 		<Unit filename="F:/github/miniweb/src/CMakeLists.txt">

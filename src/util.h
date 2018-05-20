@@ -7,8 +7,20 @@
 #include <string>
 #include <map>
 #include <fstream>
+#include <vector>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <string.h>
+#include <arpa/inet.h>
+#include <fcntl.h>
 //int error_output(int,string);
 #define CONFIG_ERROR -1
-static int port=5000;
-static string webdir="../www"
-int read_config(const char* path);
+#define INIT_PORT 6000
+#define INIT_WEB_DIR ../www
+//static int port=5000;
+//static std::string webdir="../www";
+
+void handle_for_sigpipe();
+int socket_bind_listen(int port); 
+
+int set_socket_block(int fd);

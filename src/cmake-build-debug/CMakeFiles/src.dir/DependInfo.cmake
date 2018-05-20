@@ -4,7 +4,10 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "F:/github/miniweb/src/epoll.cpp" "F:/github/miniweb/src/cmake-build-debug/CMakeFiles/src.dir/epoll.cpp.obj"
+  "F:/github/miniweb/src/http_request.cpp" "F:/github/miniweb/src/cmake-build-debug/CMakeFiles/src.dir/http_request.cpp.obj"
   "F:/github/miniweb/src/main.cpp" "F:/github/miniweb/src/cmake-build-debug/CMakeFiles/src.dir/main.cpp.obj"
+  "F:/github/miniweb/src/threadpoll.cpp" "F:/github/miniweb/src/cmake-build-debug/CMakeFiles/src.dir/threadpoll.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

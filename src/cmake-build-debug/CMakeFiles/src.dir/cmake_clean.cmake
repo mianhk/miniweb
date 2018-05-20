@@ -1,5 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/src.dir/main.cpp.obj"
+  "CMakeFiles/src.dir/epoll.cpp.obj"
+  "CMakeFiles/src.dir/http_request.cpp.obj"
+  "CMakeFiles/src.dir/threadpoll.cpp.obj"
   "src.pdb"
   "src.exe"
   "src.exe.manifest"
