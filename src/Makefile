@@ -1,5 +1,6 @@
-XX=g++ -std=c++11
-miniweb:main.o util.o 
+CFLAGS=-std=c++11
+XX=g++
+miniweb:main.o util.o
 	$(XX) *.o -o miniweb 
 
 main.o:main.cpp

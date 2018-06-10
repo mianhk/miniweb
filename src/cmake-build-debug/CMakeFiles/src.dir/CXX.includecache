@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+F:/github/miniweb/src/main.cpp
+iostream
+-
+stdio.h
+-
+util.h
+F:/github/miniweb/src/util.h
+
+F:/github/miniweb/src/util.h
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+string
+-
+map
+-
+fstream
+-
+

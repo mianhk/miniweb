@@ -1,0 +1,19 @@
+{
+   "version": "2.0.0",
+   "configurations": [
+       
+       {
+           "name": "C++ Launch (GDB)",                
+           "type": "cppdbg",                         
+           "request": "launch",                        
+           "targetArchitecture": "x86",                
+           "program": "${workspaceRoot}\\${fileBasename}.exe",                 
+           "miDebuggerPath":"C:/MinGW/bin/gdb.exe", 
+           "args": [],     
+           "stopAtEntry": false,                  
+           "cwd": "${workspaceRoot}",                  
+           "externalConsole": true,                  
+           "preLaunchTask": "g++"　　                  
+           }
+   ]
+}
