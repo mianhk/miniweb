@@ -1,3 +1,4 @@
+#pragma once
 #include <unordered_map>
 #include <string>
 #include <memory>
@@ -77,23 +78,22 @@ private:
   int h_state;
   bool is_finish;
   bool keep_alive;
-  std::unorderd_map<std::string, std::string> headers;
-  std::waak_ptr<mytimer> timer;
+  std::unordered_map<std::string, std::string> headers;
+  std::weak_ptr<Timer> timer;
 
   int parse_URI();
   int parse_headers();
   int parse_request();
 
 public:
-  Request_Data();
-  Request_Data(int _epollfd, int fd, std
-               : string _path);
-  ~Request_Data();
+  RequestData();
+  RequestData(int _epollfd, int _fd, std ::string _path);
+  ~RequestData();
   void add_timer(std::shared_ptr<Timer> mtimer);
   void reset();
   void seperate_timer();
   int getfd();
-  void setfd();
+  void setfd(int _fd);
   void handle_request();
   void handle_error(int fd, int err_num, std::string msg);
 };

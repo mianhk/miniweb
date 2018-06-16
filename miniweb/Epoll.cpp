@@ -1,5 +1,5 @@
 #include "Epoll.h"
-#include "threadpool.h"
+#include "ThreadPool.h"
 #include "util.h"
 #include <sys/epoll.h>
 #include <errno.h>
@@ -8,6 +8,14 @@
 #include <string.h>
 #include <queue>
 #include <deque>
+
+int TIMER_TIME_OUT = 500;
+extern std::priority_queue<std::shared_ptr<Timer>, std::deque<std::shared_ptr<Timer>>, timerCmp> TimerQueue;
+
+epoll_event *Epoll::events;
+std::unordered_map<int, std::shared_ptr<RequestData>> Epoll::fd2req;
+int Epoll::epoll_fd = 0;
+const std::string Epoll::PATH = "/";
 
 int Epoll::epoll_init(int max_events, int listen_num)
 {
@@ -18,7 +26,7 @@ int Epoll::epoll_init(int max_events, int listen_num)
 }
 
 // 注册新描述符
-int Epoll::epoll_add(int fd, std::shared_ptr<requestData> request, __uint32_t events)
+int Epoll::epoll_add(int fd, std::shared_ptr<RequestData> request, __uint32_t events)
 {
     struct epoll_event event;
     event.data.fd = fd;
@@ -33,7 +41,7 @@ int Epoll::epoll_add(int fd, std::shared_ptr<requestData> request, __uint32_t ev
 }
 
 // 修改描述符状态
-int Epoll::epoll_mod(int fd, std::shared_ptr<requestData> request, __uint32_t events)
+int Epoll::epoll_mod(int fd, std::shared_ptr<RequestData> request, __uint32_t events)
 {
     struct epoll_event event;
     event.data.fd = fd;
@@ -65,13 +73,13 @@ int Epoll::epoll_del(int fd, __uint32_t events)
 }
 
 // 返回活跃事件数
-void Epoll::my_epoll_wait(int listen_fd, int max_events, int timeout)
+void Epoll::epoll_wait1(int listen_fd, int max_events, int timeout)
 {
     // printf("fd2req.size()==%d\n", fd2req.size());
     int event_count = epoll_wait(epoll_fd, events, max_events, timeout);
     if (event_count < 0)
         perror("epoll wait error");
-    std::vector<std::shared_ptr<requestData>> req_data = getEventsRequest(listen_fd, event_count, PATH);
+    std::vector<std::shared_ptr<RequestData>> req_data = getEventsRequest(listen_fd, event_count, PATH);
     if (req_data.size() > 0)
     {
         for (auto &req : req_data)
@@ -96,8 +104,8 @@ void Epoll::acceptConnection(int listen_fd, int epoll_fd, const std::string path
     while ((accept_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_addr_len)) > 0)
     {
 
-        cout << inet_addr(client_addr.sin_addr.s_addr) << endl;
-        cout << client_addr.sin_port << endl;
+        // cout << inet_addr(client_addr.sin_addr.s_addr) << endl;
+        // cout << client_addr.sin_port << endl;
         /*
         // TCP的保活机制默认是关闭的
         int optval = 0;
@@ -107,32 +115,32 @@ void Epoll::acceptConnection(int listen_fd, int epoll_fd, const std::string path
         */
 
         // 设为非阻塞模式
-        int ret = setSocketNonBlocking(accept_fd);
+        int ret = set_socket_nonblocking(accept_fd);
         if (ret < 0)
         {
             perror("Set non block failed!");
             return;
         }
 
-        std::shared_ptr<requestData> req_info(new requestData(epoll_fd, accept_fd, path));
+        std::shared_ptr<RequestData> req_info(new RequestData(epoll_fd, accept_fd, path));
 
         // 文件描述符可以读，边缘触发(Edge Triggered)模式，保证一个socket连接在任一时刻只被一个线程处理
         __uint32_t _epo_event = EPOLLIN | EPOLLET | EPOLLONESHOT;
         Epoll::epoll_add(accept_fd, req_info, _epo_event);
         // 新增时间信息
-        std::shared_ptr<mytimer> mtimer(new mytimer(req_info, TIMER_TIME_OUT));
-        req_info->addTimer(mtimer);
+        std::shared_ptr<Timer> mtimer(new Timer(req_info, TIMER_TIME_OUT));
+        req_info->add_timer(mtimer);
         MutexLockGuard lock;
-        myTimerQueue.push(mtimer);
+        TimerQueue.push(mtimer);
     }
     //if(accept_fd == -1)
     //   perror("accept");
 }
 
 // 分发处理函数
-std::vector<std::shared_ptr<requestData>> Epoll::getEventsRequest(int listen_fd, int events_num, const std::string path)
+std::vector<std::shared_ptr<RequestData>> Epoll::getEventsRequest(int listen_fd, int events_num, const std::string path)
 {
-    std::vector<std::shared_ptr<requestData>> req_data;
+    std::vector<std::shared_ptr<RequestData>> req_data;
     for (int i = 0; i < events_num; ++i)
     {
         // 获取有事件产生的描述符
@@ -163,9 +171,9 @@ std::vector<std::shared_ptr<requestData>> Epoll::getEventsRequest(int listen_fd,
 
             // 将请求任务加入到线程池中
             // 加入线程池之前将Timer和request分离
-            std::shared_ptr<requestData> cur_req(fd2req[fd]);
+            std::shared_ptr<RequestData> cur_req(fd2req[fd]);
             //printf("cur_req.use_count=%d\n", cur_req.use_count());
-            cur_req->seperateTimer();
+            cur_req->seperate_timer();
             req_data.push_back(cur_req);
             auto fd_ite = fd2req.find(fd);
             if (fd_ite != fd2req.end())

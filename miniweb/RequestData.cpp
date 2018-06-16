@@ -1,7 +1,7 @@
-#include "RequestData"
+#include "RequestData.h"
 
 #include "util.h"
-#include "epoll.h"
+#include "Epoll.h"
 #include <sys/epoll.h>
 #include <unistd.h>
 #include <sys/time.h>
@@ -51,7 +51,7 @@ std::string MimeType::getMime(const std::string &suffix)
         return mime[suffix];
 }
 
-std::priority_queue<shared_ptr<Timer>, std::deque<shared_ptr<Timer>>, timerCmp> myTimerQueue;
+std::priority_queue<shared_ptr<Timer>, std::deque<shared_ptr<Timer>>, timerCmp> TimerQueue;
 
 RequestData::RequestData() : read_pos(0),
                              state(STATE_PARSE_URI),
@@ -122,7 +122,7 @@ void RequestData::reset()
     if (timer.lock())
     {
         shared_ptr<Timer> my_timer(timer.lock());
-        my_timer->clearReq();
+        my_timer->clear_req();
         timer.reset();
     }
     cout << "RequestData reset over." << endl;
@@ -133,7 +133,7 @@ void RequestData::seperate_timer()
     if (timer.lock())
     {
         shared_ptr<Timer> my_timer(timer.lock());
-        my_timer->clearReq();
+        my_timer->clear_req();
         timer.reset();
     }
 }
@@ -187,7 +187,7 @@ void RequestData::handle_request()
         }
         if (state == STATE_PARSE_HEADERS)
         {
-            int flag = this->parse_Headers();
+            int flag = this->parse_headers();
             if (flag == PARSE_HEADER_AGAIN)
             {
                 break;
@@ -226,7 +226,7 @@ void RequestData::handle_request()
         }
         if (state == STATE_ANALYSIS)
         {
-            int flag = this->analysisRequest();
+            int flag = this->parse_request();
             if (flag < 0)
             {
                 isError = true;
@@ -365,9 +365,9 @@ int RequestData::parse_URI()
         {
             string ver = request_line.substr(pos + 1, 3);
             if (ver == "1.0")
-                HTTPversion = HTTP_10;
+                HTTPv = HTTP_10;
             else if (ver == "1.1")
-                HTTPversion = HTTP_11;
+                HTTPv = HTTP_11;
             else
                 return PARSE_URI_ERROR;
         }
@@ -378,7 +378,7 @@ int RequestData::parse_URI()
     return PARSE_URI_SUCCESS;
 }
 
-int RequestData::parse_Headers()
+int RequestData::parse_headers()
 {
     return PARSE_HEADER_SUCCESS;
     string &str = content;
@@ -513,8 +513,9 @@ int RequestData::parse_Headers()
     return PARSE_HEADER_AGAIN;
 }
 
-int RequestData::analysisRequest()
+int RequestData::parse_request()
 {
+    return ANALYSIS_SUCCESS;
     cout << "begin annalysis Request " << endl;
     if (method == METHOD_POST)
     {
@@ -579,7 +580,7 @@ int RequestData::analysisRequest()
         struct stat sbuf;
         if (stat(file_name.c_str(), &sbuf) < 0)
         {
-            handleError(fd, 404, "Not Found!");
+            handle_error(fd, 404, "Not Found!");
             return ANALYSIS_ERROR;
         }
 
@@ -612,9 +613,9 @@ int RequestData::analysisRequest()
         return ANALYSIS_ERROR;
 }
 
-void RequestData::handleError(int fd, int err_num, string short_msg)
+void RequestData::handle_error(int fd, int err_num, string short_msg)
 {
-    cout << "begin handleError ..." << endl;
+    cout << "begin handle_error ..." << endl;
     short_msg = " " + short_msg;
     char send_buff[MAX_BUFF];
     string body_buff, header_buff;

@@ -1,4 +1,6 @@
 #include "util.h"
+#include "RequestData.h"
+#include "Timer.h"
 #include <unistd.h>
 #include <fcntl.h>
 #include <signal.h>
@@ -7,9 +9,13 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#include <queue>
+#include <deque>
 #include <iostream>
 const int MAX_BUF = 4096; //缓冲区大小
 const int LISTENQ = 2048; //监听队列的长度
+
+extern std::priority_queue<std::shared_ptr<Timer>, std::deque<std::shared_ptr<Timer>>, timerCmp> TimerQueue;
 
 int socket_bind_listen(int port)
 {
@@ -75,11 +81,11 @@ int socket_accept(int listen_fd)
 
 void handle_sigpipe()
 {
-    struct sigation sa;
+    struct sigaction sa;
     memset(&sa, '\0', sizeof(sa));
-    sa.sa_handler = FIG_IGN;
+    sa.sa_handler = SIG_IGN;
     sa.sa_flags = 0;
-    if (sigation(SIGPIPE, &sa, NULL))
+    if (sigaction(SIGPIPE, &sa, NULL))
         return;
 }
 
@@ -97,17 +103,17 @@ int set_socket_nonblocking(int fd)
 void handle_expired_event()
 {
     MutexLockGuard lock;
-    while (!myTimerQueue.empty())
+    while (!TimerQueue.empty())
     {
-        shared_ptr<mytimer> ptimer_now = myTimerQueue.top();
-        if (ptimer_now->isDeleted())
+        std::shared_ptr<Timer> ptimer_now = TimerQueue.top();
+        if (ptimer_now->is_deleted())
         {
-            myTimerQueue.pop();
+            TimerQueue.pop();
             //delete ptimer_now;
         }
-        else if (ptimer_now->isvalid() == false)
+        else if (ptimer_now->is_valid() == false)
         {
-            myTimerQueue.pop();
+            TimerQueue.pop();
             //delete ptimer_now;
         }
         else
@@ -115,4 +121,80 @@ void handle_expired_event()
             break;
         }
     }
+}
+
+void accept_connection(int listen_fd, int epoll_fd, const std::string &path)
+{
+    struct sockaddr_in client_addr;
+    memset(&client_addr, 0, sizeof(client_addr));
+    socklen_t client_addr_len = 0;
+    int accept_fd = 0;
+    while (accept_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_addr_len) > 0)
+    {
+        //设为非阻塞模式
+        int ret = set_socket_nonblocking(accept_fd);
+        if (ret < 0)
+        {
+            perror("set nonblock failed!");
+            return;
+        }
+    }
+}
+
+ssize_t readn(int fd, void *buff, size_t n)
+{
+    size_t nleft = n;
+    ssize_t nread = 0;
+    ssize_t readSum = 0;
+    char *ptr = (char *)buff;
+    while (nleft > 0)
+    {
+        if ((nread = read(fd, ptr, nleft)) < 0)
+        {
+            if (errno == EINTR)
+                nread = 0;
+            else if (errno == EAGAIN)
+            {
+                return readSum;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else if (nread == 0)
+            break;
+        readSum += nread;
+        nleft -= nread;
+        ptr += nread;
+    }
+    return readSum;
+}
+
+ssize_t writen(int fd, void *buff, size_t n)
+{
+    size_t nleft = n;
+    ssize_t nwritten = 0;
+    ssize_t writeSum = 0;
+    char *ptr = (char *)buff;
+    while (nleft > 0)
+    {
+        if ((nwritten = write(fd, ptr, nleft)) <= 0)
+        {
+            if (nwritten < 0)
+            {
+                if (errno == EINTR || errno == EAGAIN)
+                {
+                    nwritten = 0;
+                    continue;
+                }
+                else
+                    return -1;
+            }
+        }
+        writeSum += nwritten;
+        nleft -= nwritten;
+        ptr += nwritten;
+    }
+    return writeSum;
 }
