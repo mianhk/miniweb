@@ -370,6 +370,7 @@ int RequestData::parse_URI()
                 HTTPv = HTTP_11;
             else
                 return PARSE_URI_ERROR;
+            // cout << "HTTP version: " << HTTPv << endl;
         }
     }
 
@@ -515,7 +516,6 @@ int RequestData::parse_headers()
 
 int RequestData::parse_request()
 {
-    return ANALYSIS_SUCCESS;
     cout << "begin annalysis Request " << endl;
     if (method == METHOD_POST)
     {

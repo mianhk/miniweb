@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <memory>
 #include <iostream>
-static const int PORT = 4000;
+static const int PORT = 5000;
 static const int thread_num = 10;
 
 static const int MAXEVENTS = 5000;   //最大事件数目
