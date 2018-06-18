@@ -1,27 +1,40 @@
-<<<<<<< HEAD
-CFLAGS=-std=c++11
-XX=g++
-miniweb:main.o util.o
-	$(XX) *.o -o miniweb 
+# MAINSOURCE代表含有main入口函数的cpp文件，因为含有测试代码，
+# 所以要为多个目标编译，这里把Makefile写的通用了一点，
+# 以后加东西Makefile不用做多少改动
+MAINSOURCE := main.cpp 
+# MAINOBJS := $(patsubst %.cpp,%.o,$(MAINSOURCE))
+SOURCE  := $(wildcard *.cpp )
+override SOURCE := $(filter-out $(MAINSOURCE),$(SOURCE))
+OBJS    := $(patsubst %.cpp,%.o,$(SOURCE))
 
-main.o:main.cpp
-	$(XX) -c main.cpp
+TARGET  := miniserver
+CC      := g++
+LIBS    := -lpthread 
+INCLUDE:= -I./usr/local/lib
+CFLAGS  := -std=c++11 -g -Wall -O3 -D_PTHREADS
+CXXFLAGS:= $(CFLAGS)
 
-util.o:util.cpp util.h
-	$(XX) -c util.cpp	
+# Test object
+SUBTARGET := client
 
+.PHONY : objs clean veryclean rebuild all tests debug
+all : $(TARGET) $(SUBTARGET) 
+objs : $(OBJS)
+rebuild: veryclean all
 
-=======
-CFLAGS=-std=c++11
-XX=g++
-miniweb:main.o util.o
-	$(XX) *.o -o miniweb 
+tests : $(SUBTARGET) 
+clean :
+	find . -name '*.o' | xargs rm -f
+veryclean :
+	find . -name '*.o' | xargs rm -f
+	find . -name $(TARGET) | xargs rm -f
+	find . -name $(SUBTARGET) | xargs rm -f
+debug:
+	@echo $(SOURCE)
 
-main.o:main.cpp
-	$(XX) -c main.cpp
+$(TARGET) : $(OBJS) main.o
+	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
+# $@代表目标，这里是$(TARGET)
 
-util.o:util.cpp util.h
-	$(XX) -c util.cpp	
-
-
->>>>>>> 1245ba3f16ae99ced5c12db10ef08baba47f04dc
+#$(SUBTARGET) : $(OBJS) test/client.o
+	#$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)

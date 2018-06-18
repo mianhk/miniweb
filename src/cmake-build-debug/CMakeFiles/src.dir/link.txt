@@ -1,9 +1,0 @@
-<<<<<<< HEAD
-"D:\Program Files\JetBrains\CLion 2017.2\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\src.dir/objects.a
-C:\MinGW\bin\ar.exe cr CMakeFiles\src.dir/objects.a @CMakeFiles\src.dir\objects1.rsp
-C:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\src.dir/objects.a -Wl,--no-whole-archive  -o src.exe -Wl,--out-implib,libsrc.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\src.dir\linklibs.rsp
-=======
-"D:\Program Files\JetBrains\CLion 2017.2\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\src.dir/objects.a
-C:\MinGW\bin\ar.exe cr CMakeFiles\src.dir/objects.a @CMakeFiles\src.dir\objects1.rsp
-C:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\src.dir/objects.a -Wl,--no-whole-archive  -o src.exe -Wl,--out-implib,libsrc.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\src.dir\linklibs.rsp
->>>>>>> 1245ba3f16ae99ced5c12db10ef08baba47f04dc

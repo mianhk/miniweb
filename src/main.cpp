@@ -1,135 +1,93 @@
-<<<<<<< HEAD
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream> 
-#include <vector>
 #include "util.h"
-#include "epoll.h"
-#include "http_request.h"
-using namespace std;
+#include "RequestData.h"
+#include "Epoll.h"
+#include "ThreadPool.h"
+#include <sys/epoll.h>
+#include <queue>
+#include <sys/time.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <stdio.h>
+#include <string.h>
+#include <cstdlib>
+#include <iostream>
+#include <vector>
+#include <unistd.h>
+#include <memory>
+#include <iostream>
 
-static int port=3000;
-static int thread_num=10;
-static char* root="./www";
-int main(int argc,char ** argv){
-    int listenfd;
-    if(argc!=2){
-        perror("using: ./miniweb port\n");
+// The MIT License (MIT)
+
+// Copyright (c) 2018 mianhk
+
+//  Permission is hereby granted, free of charge, to any person obtaining a
+//  copy of this software and associated documentation files (the "Software"),
+//  to deal in the Software without restriction, including without limitation
+//  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+//  and/or sell copies of the Software, and to permit persons to whom the
+//  Software is furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+//  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+//  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+//  DEALINGS IN THE SOFTWARE.
+
+static const int MAXEVENTS = 5000; //最大事件数目
+static const int LISTENQ = 1024;   //监听队列的最大数
+const int QUEUE_NUM = 65535;       //队列大小
+int main()
+{
+    int port = 3000; //端口地址
+    std::string path = "./www";
+    int thread_num = 4; //线程池线程最大数目
+    // std::cout << "port: " << port << std::endl;
+    read_config(port, path, thread_num);
+    // std::cout << "port: " << port << std::endl;
+    handle_sigpipe(); //处理sigpipe信号
+    if (Epoll::epoll_init(MAXEVENTS, LISTENQ, path) < 0)
+    {
+        perror("epoll init error");
         return -1;
     }
-    //设置端口
-    port=atoi(argv[1]);
-    if((port<=1024)||(port>=65536)){
-        printf("warning: port out of range.Change to %d\n",5000);
-    }
-    // 处理SIGPIPE
-    handle_for_sigpipe();
 
-    //初始化socket开始监听
-    listenfd=socket_bind_listen(port);
-    printf("listining fd :%d on port :%d\n",listenfd,port);
-
-    //设置socket为非阻塞
-    int rc=set_socket_block(listenfd);
-
-    // 创建epoll并注册监听描述符
-    int epoll_fd = mi_epoll_create(0);
-    http_request_t* request=(http_request_t*)malloc(sizeof(http_request_t));
-    //初始化request
-    http_init_request_t(request,listenfd,epoll_fd,root);
-    //添加事件
-    mi_epoll_add(epoll_fd,listenfd,request,(EPOLLIN|EPOLLET));  //设置epoll触发方式
-
-    //初始化线程池
-    threadpool_t *tp=threadpoll_init(thread_num);
-
-    while(1){
-        // 得到最近且未删除时间和当前时间差值（等待时间）
-        int time = tk_find_timer();
-
-        // 调用epoll_wait函数，返回接收到事件的数量
-        int events_num = tk_epoll_wait(epoll_fd, events, MAXEVENTS, -1);
-
-        // 处理已经超时的请求
-        tk_handle_expire_timers();
-
-        // 遍历events数组，根据监听种类及描述符类型分发操作
-        tk_handle_events(epoll_fd, listen_fd, events, events_num, conf.root, tp);
+    if (ThreadPool::threadpool_create(thread_num, QUEUE_NUM) < 0)
+    {
+        perror("ThreadPool create error");
+        return -1;
     }
 
-    // 回收线程资源
-    // threadpool_destroy(tp, graceful_shutdown);
+    int listenfd; //监听的文件描述符
+    if ((listenfd = socket_bind_listen(port)) < 0)
+    {
+        perror("socket bind error");
+        return -1;
+    }
 
+    if (set_socket_nonblocking(listenfd) < 0)
+    {
+        perror("set socket nonblocking error");
+        return -1;
+    }
 
+    shared_ptr<RequestData> request(new RequestData(path));
+    request->setfd(listenfd);
+
+    if (Epoll::epoll_add(listenfd, request, EPOLLIN | EPOLLET) < 0)
+    {
+        perror("epoll add error");
+        return -1;
+    }
+    while (true)
+    {
+        Epoll::epoll_wait1(listenfd, MAXEVENTS, -1); //重载的epoll_wait
+        handle_expired_event();
+    }
 
     return 0;
 }
-
-=======
-#include <stdlib.h>
-#include <stdio.h>
-#include <iostream> 
-#include <vector>
-#include "util.h"
-#include "epoll.h"
-#include "http_request.h"
-using namespace std;
-
-static int port=3000;
-static int thread_num=10;
-static char* root="./www";
-int main(int argc,char ** argv){
-    int listenfd;
-    if(argc!=2){
-        perror("using: ./miniweb port\n");
-        return -1;
-    }
-    //设置端口
-    port=atoi(argv[1]);
-    if((port<=1024)||(port>=65536)){
-        printf("warning: port out of range.Change to %d\n",5000);
-    }
-    // 处理SIGPIPE
-    handle_for_sigpipe();
-
-    //初始化socket开始监听
-    listenfd=socket_bind_listen(port);
-    printf("listining fd :%d on port :%d\n",listenfd,port);
-
-    //设置socket为非阻塞
-    int rc=set_socket_block(listenfd);
-
-    // 创建epoll并注册监听描述符
-    int epoll_fd = mi_epoll_create(0);
-    http_request_t* request=(http_request_t*)malloc(sizeof(http_request_t));
-    //初始化request
-    http_init_request_t(request,listenfd,epoll_fd,root);
-    //添加事件
-    mi_epoll_add(epoll_fd,listenfd,request,(EPOLLIN|EPOLLET));  //设置epoll触发方式
-
-    //初始化线程池
-    threadpool_t *tp=threadpoll_init(thread_num);
-
-    while(1){
-        // 得到最近且未删除时间和当前时间差值（等待时间）
-        int time = tk_find_timer();
-
-        // 调用epoll_wait函数，返回接收到事件的数量
-        int events_num = tk_epoll_wait(epoll_fd, events, MAXEVENTS, -1);
-
-        // 处理已经超时的请求
-        tk_handle_expire_timers();
-
-        // 遍历events数组，根据监听种类及描述符类型分发操作
-        tk_handle_events(epoll_fd, listen_fd, events, events_num, conf.root, tp);
-    }
-
-    // 回收线程资源
-    // threadpool_destroy(tp, graceful_shutdown);
-
-
-
-    return 0;
-}
-
->>>>>>> 1245ba3f16ae99ced5c12db10ef08baba47f04dc

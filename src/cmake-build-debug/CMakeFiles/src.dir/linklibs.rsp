@@ -1,5 +1,0 @@
-<<<<<<< HEAD
--lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
-=======
--lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
->>>>>>> 1245ba3f16ae99ced5c12db10ef08baba47f04dc
