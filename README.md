@@ -10,7 +10,7 @@ Miniweb is a lightwight HTTP WebServer based on C++11.
 - Complier : gcc version 5.4.0
 ## Demo Page
 Please go to: www.yuguocong.cn/miniweb
-<img src="http://blog-1252063226.cosbj.myqcloud.com/network/20180618190118.png"/>
+<img src="http://blog-1252063226.cosbj.myqcloud.com/network/20180618201015.png"/>
 ## Getting started
 ```
 # clone reposity to your local path.
