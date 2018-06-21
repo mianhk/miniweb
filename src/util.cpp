@@ -81,26 +81,26 @@ int socket_bind_listen(int port)
     return listen_fd;
 }
 
-int socket_accept(int listen_fd)
-{
-    int confd;
-    char buf[MAX_BUF];
-    int n;
-    while (1)
-    {
-        if ((confd = accept(listen_fd, (struct sockaddr *)NULL, NULL)) == -1)
-        {
-            std::cout << "accept error." << std::endl;
-            continue;
-        }
-        n = recv(confd, buf, MAX_BUF, 0);
-        buf[n] = '\0';
-        printf("recv from client %s\n", buf);
-        close(confd);
-    }
-    close(listen_fd);
-    return 0;
-}
+// int socket_accept(int listen_fd)
+// {
+//     int confd;
+//     char buf[MAX_BUF];
+//     int n;
+//     while (1)
+//     {
+//         if ((confd = accept(listen_fd, (struct sockaddr *)NULL, NULL)) == -1)
+//         {
+//             std::cout << "accept error." << std::endl;
+//             continue;
+//         }
+//         n = recv(confd, buf, MAX_BUF, 0);
+//         buf[n] = '\0';
+//         printf("recv from client %s\n", buf);
+//         close(confd);
+//     }
+//     close(listen_fd);
+//     return 0;
+// }
 
 void handle_sigpipe()
 {
@@ -146,23 +146,23 @@ void handle_expired_event()
     }
 }
 
-void accept_connection(int listen_fd, int epoll_fd, const std::string &path)
-{
-    struct sockaddr_in client_addr;
-    memset(&client_addr, 0, sizeof(client_addr));
-    socklen_t client_addr_len = 0;
-    int accept_fd = 0;
-    while ((accept_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_addr_len)) > 0)
-    {
-        //设为非阻塞模式
-        int ret = set_socket_nonblocking(accept_fd);
-        if (ret < 0)
-        {
-            perror("set nonblock failed!");
-            return;
-        }
-    }
-}
+// void accept_connection(int listen_fd, int epoll_fd, const std::string &path)
+// {
+//     struct sockaddr_in client_addr;
+//     memset(&client_addr, 0, sizeof(client_addr));
+//     socklen_t client_addr_len = 0;
+//     int accept_fd = 0;
+//     while ((accept_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_addr_len)) > 0)
+//     {
+//         //设为非阻塞模式
+//         int ret = set_socket_nonblocking(accept_fd);
+//         if (ret < 0)
+//         {
+//             perror("set nonblock failed!");
+//             return;
+//         }
+//     }
+// }
 
 ssize_t readn(int fd, void *buff, size_t n)
 {

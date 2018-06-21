@@ -7006,3 +7006,31 @@ Timer()
 parse_URI   content:  /*à     Cookie: mstshash=Administr
      
 pthread_cond_wait..............
+Timer()
+~Timer()
+parse_URI   content:GET / HTTP/1.1
+Host: 111.230.231.95:5000
+Connection: close
+Accept-Encoding: gzip, deflate
+Accept: */*
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36
+Accept-Language: zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3
+
+
+file_name: index.html
+parse URI success
+str::::::::
+Host: 111.230.231.95:5000
+Connection: close
+Accept-Encoding: gzip, deflate
+Accept: */*
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36
+Accept-Language: zh-cn,zh;q=0.8,en-us;q=0.5,en;q=0.3
+
+
+parse Headers success
+begin annalysis Request 
+header
+filetype:   text/html
+method get filename:index.html
+pthread_cond_wait..............
