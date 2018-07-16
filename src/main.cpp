@@ -46,9 +46,7 @@ int main()
     int port = 3000; //端口地址
     std::string path = "./www";
     int thread_num = 4; //线程池线程最大数目
-    // std::cout << "port: " << port << std::endl;
     read_config(port, path, thread_num);
-    // std::cout << "port: " << port << std::endl;
     handle_sigpipe(); //处理sigpipe信号
     if (Epoll::epoll_init(MAXEVENTS, LISTENQ, path) < 0)
     {

@@ -1,4 +1,0 @@
-port=5000
-path="./www"
-thread_num=4
-

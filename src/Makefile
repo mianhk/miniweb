@@ -34,7 +34,3 @@ debug:
 
 $(TARGET) : $(OBJS) main.o
 	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
-# $@代表目标，这里是$(TARGET)
-
-#$(SUBTARGET) : $(OBJS) test/client.o
-	#$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS)
