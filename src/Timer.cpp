@@ -18,9 +18,10 @@ using namespace std;
 Timer::Timer(shared_ptr<RequestData> _request_data, int timeout) : deleted(false),
                                                                    request_data(_request_data)
 {
-    cout << "Timer()" << endl;
+    // cout << "Timer()" << endl;
     struct timeval now;
     gettimeofday(&now, NULL);
+    // cout << "now tv_sec: " << now.tv_sec << endl;
     // 以毫秒计
     expired_time = ((now.tv_sec * 1000) + (now.tv_usec / 1000)) + timeout;
 }

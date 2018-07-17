@@ -15,8 +15,8 @@ const int THREADPOOL_SHUTDOWN = -4;
 const int THREADPOOL_THREAD_FAILURE = -5;
 const int THREADPOOL_GRACEFUL = 1;
 
-const int MAX_THREADS = 1024;
-const int MAX_QUEUE = 65535;
+const int MAX_THREADS = 1024; //限制的最大线程数
+const int MAX_QUEUE = 65535;  //限制的队列最大长度
 
 typedef enum
 {

@@ -19,8 +19,8 @@ int ThreadPool::threadpool_create(int _thread_count, int _queue_size)
     {
         if (_thread_count <= 0 || _thread_count > MAX_THREADS || _queue_size <= 0 || _queue_size > MAX_QUEUE)
         {
-            _thread_count = 4;
-            _queue_size = 1024;
+            _thread_count = MAX_THREADS;
+            _queue_size = MAX_QUEUE;
         }
 
         thread_count = 0;
@@ -31,6 +31,7 @@ int ThreadPool::threadpool_create(int _thread_count, int _queue_size)
         threads.resize(_thread_count);
         queue.resize(_queue_size);
 
+        cout << "第一次thread_poll" << endl;
         /* Start worker threads */
         for (int i = 0; i < _thread_count; ++i)
         {
@@ -96,71 +97,6 @@ int ThreadPool::threadpool_add(std::shared_ptr<void> args, std::function<void(st
         err = THREADPOOL_LOCK_FAILURE;
     return err;
 }
-
-/*
-int threadpool_destroy(threadpool_t *pool, int flags)
-{
-    printf("Thread pool destroy !\n");
-    int i, err = 0;
-
-    if(pthread_mutex_lock(&(pool->lock)) != 0) 
-    {
-        return THREADPOOL_LOCK_FAILURE;
-    }
-
-    do 
-    {
-        if(pool->shutdown) {
-            err = THREADPOOL_SHUTDOWN;
-            break;
-        }
-
-        pool->shutdown = (flags & THREADPOOL_GRACEFUL) ?
-            graceful_shutdown : immediate_shutdown;
-
-        if((pthread_cond_broadcast(&(pool->notify)) != 0) ||
-           (pthread_mutex_unlock(&(pool->lock)) != 0)) {
-            err = THREADPOOL_LOCK_FAILURE;
-            break;
-        }
-
-        for(i = 0; i < pool->thread_count; ++i)
-        {
-            if(pthread_join(pool->threads[i], NULL) != 0)
-            {
-                err = THREADPOOL_THREAD_FAILURE;
-            }
-        }
-    } while(false);
-
-    if(!err) 
-    {
-        threadpool_free(pool);
-    }
-    return err;
-}
-
-int threadpool_free(threadpool_t *pool)
-{
-    if(pool == NULL || pool->started > 0)
-    {
-        return -1;
-    }
-
-    if(pool->threads) 
-    {
-        free(pool->threads);
-        free(pool->queue);
- 
-
-        pthread_mutex_lock(&(pool->lock));
-        pthread_mutex_destroy(&(pool->lock));
-        pthread_cond_destroy(&(pool->notify));
-    }
-    free(pool);    
-    return 0;
-}
-*/
 
 void *ThreadPool::threadpool_thread(void *args)
 {

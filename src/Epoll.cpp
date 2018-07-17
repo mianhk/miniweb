@@ -15,7 +15,7 @@ extern std::priority_queue<std::shared_ptr<Timer>, std::deque<std::shared_ptr<Ti
 epoll_event *Epoll::events;
 std::unordered_map<int, std::shared_ptr<RequestData>> Epoll::fd2req;
 int Epoll::epoll_fd = 0;
-std::string Epoll::PATH = "/";
+std::string Epoll::PATH = "./";
 
 int Epoll::epoll_init(int max_events, int listen_num, std::string path)
 {

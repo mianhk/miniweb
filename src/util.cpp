@@ -77,7 +77,7 @@ int socket_bind_listen(int port)
         close(listen_fd);
         return -1;
     }
-    std::cout << "Miniserver linsen on port: " << port << std::endl;
+    std::cout << "Miniserver linsening on port: " << port << std::endl;
     return listen_fd;
 }
 
