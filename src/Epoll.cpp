@@ -8,6 +8,7 @@
 #include <string.h>
 #include <queue>
 #include <deque>
+#include <arpa/inet.h>
 
 int TIMER_TIME_OUT = 500;
 extern std::priority_queue<std::shared_ptr<Timer>, std::deque<std::shared_ptr<Timer>>, timerCmp> TimerQueue;
@@ -86,7 +87,7 @@ void Epoll::epoll_wait1(int listen_fd, int max_events, int timeout)
     {
         for (auto &req : req_data)
         {
-            if (ThreadPool::threadpool_add(req) < 0)
+            if (ThreadPool::threadpool_add(req, my_handler) < 0)
             {
                 // 线程池满了或者关闭了等原因，抛弃本次监听到的请求。
                 break;
@@ -94,9 +95,9 @@ void Epoll::epoll_wait1(int listen_fd, int max_events, int timeout)
         }
     }
 }
-#include <iostream>
-#include <arpa/inet.h>
-using namespace std;
+// #include <iostream>
+
+// using namespace std;
 void Epoll::accept_connection(int listen_fd, int epoll_fd, const std::string path)
 {
     struct sockaddr_in client_addr;

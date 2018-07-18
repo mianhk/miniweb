@@ -19,8 +19,8 @@ int ThreadPool::threadpool_create(int _thread_count, int _queue_size)
     {
         if (_thread_count <= 0 || _thread_count > MAX_THREADS || _queue_size <= 0 || _queue_size > MAX_QUEUE)
         {
-            _thread_count = MAX_THREADS;
-            _queue_size = MAX_QUEUE;
+            _thread_count = 4;
+            _queue_size = 1024;
         }
 
         thread_count = 0;

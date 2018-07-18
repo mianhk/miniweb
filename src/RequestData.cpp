@@ -334,7 +334,7 @@ int RequestData::parse_URI()
 
             else
                 file_name = "index.html";
-            cout << "file_name: " << file_name << endl;
+            // cout << "file_name: " << file_name << endl;
         }
         pos = _pos;
     }
@@ -370,13 +370,13 @@ int RequestData::parse_URI()
 
 int RequestData::parse_headers()
 {
-    return PARSE_HEADER_SUCCESS;
+    // return PARSE_HEADER_SUCCESS;
     string &str = content;
     cout << "str: " << str << endl;
     int key_start = -1, key_end = -1, value_start = -1, value_end = -1;
     int now_read_line_begin = 0;
     bool notFinish = true;
-    for (int i = 0; i < str.size() && notFinish; ++i)
+    for (size_t i = 0; i < str.size() && notFinish; ++i)
     {
         switch (h_state)
         {
@@ -519,7 +519,7 @@ int RequestData::parse_request()
         }
         cout << "content=" << content << endl;
         // test char*
-        char *send_content = "I have receiced this.";
+        char send_content[] = "I have receiced this.";
 
         sprintf(header, "%sContent-length: %zu\r\n", header, strlen(send_content));
         sprintf(header, "%s\r\n", header);

@@ -11,7 +11,8 @@ TARGET  := miniserver
 CC      := g++
 LIBS    := -lpthread 
 INCLUDE:= -I./usr/local/lib
-CFLAGS  := -std=c++11 -g -Wall -O3 -D_PTHREADS
+CFLAGS  := -std=c++11 -g -lpthread 
+# CFLAGS  := -std=c++11 -g -Wall -O3 -D_PTHREADS
 CXXFLAGS:= $(CFLAGS)
 
 # Test object
