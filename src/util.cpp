@@ -38,6 +38,7 @@ void read_config(int &port, std::string &path, int &thread_num)
             path = suffix;
         if (prefix_line == "thread_num")
             ss >> thread_num;
+        std::cout << "thread_num: " << thread_num << std::endl;
     }
     return;
 }
