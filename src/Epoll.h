@@ -9,7 +9,7 @@ class Epoll
 {
 private:
   static epoll_event *events;
-  static std::unordered_map<int, std::shared_ptr<RequestData>> fd2req;
+  static std::unordered_map<int, std::shared_ptr<RequestData>> fd2req; //fd->request_data的map
   static int epoll_fd;
   static std::string PATH;
 

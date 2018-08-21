@@ -20,10 +20,10 @@ std::string Epoll::PATH = "./";
 
 int Epoll::epoll_init(int max_events, int listen_num, std::string path)
 {
-    PATH = path;
-    std::cout << "PATH" << PATH << std::endl;
+    // PATH = path;
+    // std::cout << "PATH" << PATH << std::endl;
     if ((epoll_fd = epoll_create1(EPOLL_CLOEXEC)) == -1)
-        return -1; //它是fd的一个标识说明，用来设置文件close-on-exec状态的。当close-on-exec状态为0时，调用exec时，fd不会被关闭；状态非零时则会被关闭，这样做可以防止fd泄露给执行exec后的进程。关于exec的用法，大家可以去自己查阅下，或者直接man exec。
+        return -1; //它是fd的一个标识说明，用来设置文件close-on-exec状态的。当close-on-exec状态为0时，调用exec时，fd不会被关闭；状态非零时则会被关闭，这样做可以防止fd泄露给执行exec后的进程。
     events = new epoll_event[max_events];
     return 0;
 }
@@ -136,8 +136,6 @@ void Epoll::accept_connection(int listen_fd, int epoll_fd, const std::string pat
         MutexLockGuard lock;
         TimerQueue.push(mtimer);
     }
-    //if(accept_fd == -1)
-    //   perror("accept");
 }
 
 // 分发处理函数
@@ -164,18 +162,15 @@ std::vector<std::shared_ptr<RequestData>> Epoll::get_events_request(int listen_f
             // 排除错误事件
             if ((events[i].events & EPOLLERR) || (events[i].events & EPOLLHUP) || (!(events[i].events & EPOLLIN)))
             {
-                //printf("error event\n");
                 auto fd_ite = fd2req.find(fd);
                 if (fd_ite != fd2req.end())
                     fd2req.erase(fd_ite);
-                //printf("fd = %d, here\n", fd);
                 continue;
             }
 
             // 将请求任务加入到线程池中
             // 加入线程池之前将Timer和request分离
             std::shared_ptr<RequestData> cur_req(fd2req[fd]);
-            //printf("cur_req.use_count=%d\n", cur_req.use_count());
             cur_req->seperate_timer();
             req_data.push_back(cur_req);
             auto fd_ite = fd2req.find(fd);

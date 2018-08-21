@@ -45,15 +45,16 @@ int main()
 {
     int port = 3000; //端口地址
     std::string path = "./www";
-    int thread_num = 4; //线程池线程最大数目
+    int thread_num = 80; //线程池线程最大数目
     read_config(port, path, thread_num);
     handle_sigpipe(); //处理sigpipe信号
+    //epoll初始化
     if (Epoll::epoll_init(MAXEVENTS, LISTENQ, path) < 0)
     {
         perror("epoll init error");
         return -1;
     }
-
+    //创建线程池
     if (ThreadPool::threadpool_create(thread_num, QUEUE_NUM) < 0)
     {
         perror("ThreadPool create error");

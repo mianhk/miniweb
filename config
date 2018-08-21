@@ -1,4 +1,4 @@
 port=5000
 dir="../www"
-thread_num=20
+thread_num=4
 end
