@@ -9,6 +9,7 @@
 #include <queue>
 #include <deque>
 #include <arpa/inet.h>
+// #include "RequestData.h"
 
 int TIMER_TIME_OUT = 500;
 extern std::priority_queue<std::shared_ptr<Timer>, std::deque<std::shared_ptr<Timer>>, timerCmp> TimerQueue;
@@ -78,7 +79,6 @@ int Epoll::epoll_del(int fd, __uint32_t events)
 // 返回活跃事件数
 void Epoll::epoll_wait1(int listen_fd, int max_events, int timeout)
 {
-    // printf("fd2req.size()==%d\n", fd2req.size());
     int event_count = epoll_wait(epoll_fd, events, max_events, timeout);
     if (event_count < 0)
         perror("epoll wait error");
@@ -93,48 +93,6 @@ void Epoll::epoll_wait1(int listen_fd, int max_events, int timeout)
                 break;
             }
         }
-    }
-}
-// #include <iostream>
-
-// using namespace std;
-void Epoll::accept_connection(int listen_fd, int epoll_fd, const std::string path)
-{
-    struct sockaddr_in client_addr;
-    memset(&client_addr, 0, sizeof(struct sockaddr_in));
-    socklen_t client_addr_len = 0;
-    int accept_fd = 0;
-    while ((accept_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_addr_len)) > 0)
-    {
-
-        // cout << inet_addr(client_addr.sin_addr.s_addr) << endl;
-        // cout << client_addr.sin_port << endl;
-        /*
-        // TCP的保活机制默认是关闭的
-        int optval = 0;
-        socklen_t len_optval = 4;
-        getsockopt(accept_fd, SOL_SOCKET,  SO_KEEPALIVE, &optval, &len_optval);
-        cout << "optval ==" << optval << endl;
-        */
-
-        // 设为非阻塞模式
-        int ret = set_socket_nonblocking(accept_fd);
-        if (ret < 0)
-        {
-            perror("Set non block failed!");
-            return;
-        }
-
-        std::shared_ptr<RequestData> req_info(new RequestData(epoll_fd, accept_fd, path));
-
-        // 文件描述符可以读，边缘触发(Edge Triggered)模式，保证一个socket连接在任一时刻只被一个线程处理
-        __uint32_t _epo_event = EPOLLIN | EPOLLET | EPOLLONESHOT;
-        Epoll::epoll_add(accept_fd, req_info, _epo_event);
-        // 新增时间信息
-        std::shared_ptr<Timer> mtimer(new Timer(req_info, TIMER_TIME_OUT));
-        req_info->add_timer(mtimer);
-        MutexLockGuard lock;
-        TimerQueue.push(mtimer);
     }
 }
 
@@ -179,4 +137,41 @@ std::vector<std::shared_ptr<RequestData>> Epoll::get_events_request(int listen_f
         }
     }
     return req_data;
+}
+
+void Epoll::accept_connection(int listen_fd, int epoll_fd, const std::string path)
+{
+    struct sockaddr_in client_addr;
+    memset(&client_addr, 0, sizeof(struct sockaddr_in));
+    socklen_t client_addr_len = 0;
+    int accept_fd = 0;
+    while ((accept_fd = accept(listen_fd, (struct sockaddr *)&client_addr, &client_addr_len)) > 0)
+    {
+        /*
+        // TCP的保活机制默认是关闭的
+        int optval = 0;
+        socklen_t len_optval = 4;
+        getsockopt(accept_fd, SOL_SOCKET,  SO_KEEPALIVE, &optval, &len_optval);
+        cout << "optval ==" << optval << endl;
+        */
+
+        // 设为非阻塞模式
+        int ret = set_socket_nonblocking(accept_fd);
+        if (ret < 0)
+        {
+            perror("Set non block failed!");
+            return;
+        }
+
+        std::shared_ptr<RequestData> req_info(new RequestData(epoll_fd, accept_fd, path));
+
+        // 文件描述符可以读，边缘触发(Edge Triggered)模式，保证一个socket连接在任一时刻只被一个线程处理
+        __uint32_t _epo_event = EPOLLIN | EPOLLET | EPOLLONESHOT;
+        Epoll::epoll_add(accept_fd, req_info, _epo_event);
+        // 新增时间信息
+        std::shared_ptr<Timer> mtimer(new Timer(req_info, TIMER_TIME_OUT));
+        req_info->add_timer(mtimer);
+        MutexLockGuard lock;
+        TimerQueue.push(mtimer);
+    }
 }

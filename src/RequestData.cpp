@@ -259,7 +259,7 @@ void RequestData::handle_request()
     }
     // 一定要先加时间信息，否则可能会出现刚加进去，下个in触发来了，然后分离失败后，又加入队列，最后超时被删，然后正在线程中进行的任务出错，double free错误。
     // 新增时间信息
-    shared_ptr<Timer> mtimer(new Timer(shared_from_this(), 500));
+    shared_ptr<Timer> mtimer(new Timer(shared_from_this(), 200));
     this->add_timer(mtimer);
     {
         MutexLockGuard lock;
